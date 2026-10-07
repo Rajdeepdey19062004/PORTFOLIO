@@ -1,23 +1,37 @@
-document.getElementById('myForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const number = document.getElementById('number').value;
-    const date = document.getElementById('date').value;
-    
-    if (name === '' || email === '' || number === '' || date === '') {
-        showError('All fields are required.');
-    } else {
-        alert('Form submitted successfully!');
-    }
-});
+const form = document.getElementById('myForm');
+const closeAlert = document.getElementById('close-alert');
+const errorAlert = document.getElementById('error-alert');
+const errorMessage = document.getElementById('error-message');
 
-document.getElementById('close-alert').addEventListener('click', function() {
-    document.getElementById('error-alert').style.display = 'none';
-});
+if (form) {
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const fieldIds = ['name', 'email', 'number', 'date'];
+        const hasMissingField = fieldIds.some((id) => {
+            const field = document.getElementById(id);
+            return !field || field.value.trim() === '';
+        });
+
+        if (hasMissingField) {
+            showError('All fields are required.');
+            return;
+        }
+
+        alert('Form submitted successfully!');
+    });
+}
+
+if (closeAlert && errorAlert) {
+    closeAlert.addEventListener('click', function() {
+        errorAlert.style.display = 'none';
+    });
+}
 
 function showError(message) {
-    document.getElementById('error-message').innerText = message;
-    document.getElementById('error-alert').style.display = 'block';
+    if (!errorAlert || !errorMessage) {
+        return;
+    }
+    errorMessage.innerText = message;
+    errorAlert.style.display = 'block';
 }
